@@ -60,7 +60,7 @@ export function ContactsComp({ contacts } : ContactsListProp) {
         <div className='basis-2/3'>
           <ScrollArea className="h-[80vh] m-2">
             {contactGroups.map((ele) => (
-              <div className="flex flex-col">
+              <div key={ele.key} className="flex flex-col">
                 {ele}
               </div>
             ))}
