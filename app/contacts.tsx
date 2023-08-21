@@ -13,61 +13,136 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Globe, Mail, Phone } from "lucide-react"
-import { useState } from "react"
+import { Briefcase, Globe, Mail, Map, Phone } from "lucide-react"
+import { MouseEventHandler, useState } from "react"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 
 export function ContactsComp({ contacts } : ContactsListProp) {
+    const [contactsState, setContactsState] = useState(contacts);
+
+    contacts.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    })
+
     const [detailContact, setDetailContact] = useState(contacts[0]);
-  
+
+    let prevLetter = '$';
+    const contactGroups = []
+    for (const contact of contactsState) {
+      const letter = contact.name.slice(0, 1).toUpperCase();
+      if (!contact.name.startsWith(prevLetter)) {
+        contactGroups.push((
+          <Badge className="w-8 ml-2 mt-4">
+            {letter}
+          </Badge>
+        ))
+      }
+      contactGroups.push((
+        <div onClick={() => setDetailContact(contact)}>
+          <ContactCard {...contact}/>
+        </div>
+      ))
+      prevLetter = letter
+    }
+
     return (
       <div className="flex flex-row">
         <div className='basis-2/3'>
           <ScrollArea className="h-[80vh] m-2">
-            {contacts.map((contact) => (
-              <>
-                <Card onClick={() => setDetailContact(contact)} className="m-1 align-middle flex flex-row gap-4 hover:bg-accent hover:text-accent-foreground">
-                  <CardHeader className="flex flex-row gap-4 flex-grow">
-                    <Avatar className="mt-1">
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>CN</AvatarFallback> 
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <CardTitle className="font-normal">{contact.name}</CardTitle>
-                      <CardDescription>{contact.company.name}</CardDescription>
-                    </div>
-                  </CardHeader>
-                  <Button variant='default' className="text-end mt-7">
-                    <Phone/>
-                  </Button>
-                  <Button variant='default' className="text-end mt-7">
-                    <Mail/>
-                  </Button>
-                  <Button variant='default' className="text-end mt-7 mr-10">
-                    <Globe/>
-                  </Button>
-                </Card>
-              </>
+            {contactGroups.map((ele) => (
+              <div className="flex flex-col">
+                {ele}
+              </div>
             ))}
           </ScrollArea>
         </div>
         <div className='basis-1/3'>
           <ContactDetails {...detailContact}/>
-          <p>{detailContact.name}</p>
         </div>
       </div>
     )
+}
+
+
+function ContactCard(contact: Contact) {
+  return (
+    <Card className="m-1 align-middle flex flex-row gap-4 hover:bg-accent hover:text-accent-foreground shadow-md">
+      <CardHeader className="flex flex-row gap-4 flex-grow">
+        <Avatar className="mt-1">
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>CN</AvatarFallback> 
+        </Avatar>
+        <div className="flex flex-col">
+          <CardTitle className="font-normal">{contact.name}</CardTitle>
+          <CardDescription>{contact.company.name}</CardDescription>
+        </div>
+      </CardHeader>
+      <Button variant='default' className="text-end mt-7">
+        <Phone/>
+      </Button>
+      <Button variant='default' className="text-end mt-7">
+        <Mail/>
+      </Button>
+      <Button variant='default' className="text-end mt-7 mr-10">
+        <Globe/>
+      </Button>
+    </Card>
+  );
 }
   
 function ContactDetails(contact : Contact) {
     
     return (
-      <Card className="m-2">
+      <Card className="m-2 shadow-md">
         <CardHeader>
-          <CardTitle>Details</CardTitle>
+          <CardTitle className="font-normal">Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <img src='https://static.vecteezy.com/system/resources/previews/005/228/939/original/avatar-man-face-silhouette-user-sign-person-profile-picture-male-icon-black-color-illustration-flat-style-image-vector.jpg' width={400}/>
-          <p>{contact.name}</p>
+          <div className="text-center m-auto flex justify-center">
+            <img src='https://static.vecteezy.com/system/resources/previews/005/228/939/original/avatar-man-face-silhouette-user-sign-person-profile-picture-male-icon-black-color-illustration-flat-style-image-vector.jpg' width={300}/>
+          </div>
+          <div className="flex flex-col m-1 gap-2">
+            <div className="flex flex-col mb-2">
+              <label className="text-xl">
+                {contact.name}
+              </label>
+              <label className="">
+                @{contact.username}
+              </label>
+            </div>
+            <label>
+              <Phone className="inline mr-3"/>
+              {contact.phone}
+            </label>
+            <label>
+              <Mail className="inline mr-3"/>
+              {contact.email}
+            </label>
+            <label>
+              <Globe className="inline mr-3"/>
+              {contact.website}
+            </label>
+            <label>
+              <Briefcase className="inline mr-3"/>
+              {contact.company.name}
+            </label>
+            <div className="flex flex-row">
+              <Map className="mr-3"/>
+              <div className="flex flex-col">
+                <div>{contact.address.suite}</div>
+                <div>{contact.address.street}</div>
+                <div>{contact.address.city}</div>
+                <div>{contact.address.zipcode}</div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     )

@@ -18,8 +18,8 @@ export default async function Home() {
   const contacts = await getContacts();
 
   return (
-    <div className="flex flex-col">
-      <div className="text-6xl font-medium m-8">
+    <div className="flex flex-col bg- h-screen">
+      <div className="text-6xl font-medium p-8 bg-primary text-white">
         <h1>Contacts</h1>
       </div>
       <ContactsComp contacts={contacts}/>
