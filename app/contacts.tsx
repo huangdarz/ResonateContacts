@@ -17,6 +17,9 @@ import { Briefcase, Globe, Mail, Map, Phone } from "lucide-react"
 import { MouseEventHandler, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import Image from "next/image"
+
+import profilePic from './profile-icon-design-free-vector.jpg'
 
 export function ContactsComp({ contacts } : ContactsListProp) {
     const [contactsState, setContactsState] = useState(contacts);
@@ -106,7 +109,7 @@ function ContactDetails(contact : Contact) {
         </CardHeader>
         <CardContent>
           <div className="text-center m-auto flex justify-center">
-            <img src='https://static.vecteezy.com/system/resources/previews/005/228/939/original/avatar-man-face-silhouette-user-sign-person-profile-picture-male-icon-black-color-illustration-flat-style-image-vector.jpg' width={300}/>
+            <Image src={profilePic} width={300} height={300} alt={""}/>
           </div>
           <div className="flex flex-col m-1 gap-2">
             <div className="flex flex-col mb-2">
