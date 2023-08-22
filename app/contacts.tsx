@@ -37,18 +37,20 @@ export function ContactsComp({ contacts } : ContactsListProp) {
 
     const letters = new Set<string>();
     const badgeRefs = new Map();
+    const scrollRefs = useRef<HTMLDivElement[]>([]);
+
+    let i = 0;
 
     let firstLetter = contactsState[0].name.slice(0, 1);
     const contactGroupLetter = [];
     let group = [];
     for (const contact of contactsState) {
       if (!contact.name.startsWith(firstLetter)) {
-        const badgeRef = useRef(null);
-        badgeRefs.set(firstLetter, badgeRef);
+        badgeRefs.set(firstLetter, i);
         const letter = contact.name.slice(0, 1).toUpperCase();
         contactGroupLetter.push((
           <div className="relative">
-            <div className="flex flex-row sticky top-0 bg-secondary z-10" ref={badgeRef}>
+            <div className="flex flex-row sticky top-0 bg-secondary z-10" key={i} ref={ref => scrollRefs.current.push(ref!)}>
               <Badge className="w-8 ml-2 mt-4 mb-4">
                 {firstLetter}
               </Badge>
@@ -57,6 +59,7 @@ export function ContactsComp({ contacts } : ContactsListProp) {
             {group}
           </div>
         ));
+        i++;
         letters.add(firstLetter);
         group = []
         firstLetter = letter;
@@ -68,12 +71,11 @@ export function ContactsComp({ contacts } : ContactsListProp) {
       ));
     }
     if (group.length > 0) {
-      const badgeRef = useRef(null);
-      badgeRefs.set(firstLetter, badgeRef);
+      badgeRefs.set(firstLetter, i);
       
       contactGroupLetter.push((
         <div className="relative">
-          <div className="sticky top-0 bg-secondary z-10" ref={badgeRef}>
+          <div className="sticky top-0 bg-secondary z-10" key={i} ref={ref => scrollRefs.current.push(ref!)}>
             <Badge className="w-8 ml-2 mt-4 mb-4">
               {firstLetter}
             </Badge>
@@ -81,10 +83,11 @@ export function ContactsComp({ contacts } : ContactsListProp) {
           {group}
         </div>
       ));
+      i++;
     }
 
     const scrollToLetter = (letter: string) => {
-      badgeRefs.get(letter).current.scrollIntoView({ behavior: 'smooth' })
+      scrollRefs.current[badgeRefs.get(letter)].scrollIntoView({behavior: 'smooth'})
     }
 
     return (
@@ -92,7 +95,7 @@ export function ContactsComp({ contacts } : ContactsListProp) {
         <div className="basis-2/3 flex flex-col">
           <div className="flex flex-row gap-4 mt-8 ml-8 mr-8">
             {Array.from(letters).map((ele) => (
-              <div className="text-center flex-grow border rounded-lg bg-card cursor-pointer hover:bg-accent hover:text-accent-foreground shadow-sm"
+              <div key={ele} className="text-center flex-grow border rounded-lg bg-card cursor-pointer hover:bg-accent hover:text-accent-foreground shadow-sm"
                 onClick={() => scrollToLetter(ele)}
               >
                 {ele}
