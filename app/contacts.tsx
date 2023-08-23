@@ -21,6 +21,7 @@ import profilePic from './profile-icon-design-free-vector.jpg'
 export function ContactsComp({ contacts } : ContactsListProp) {
     const [contactsState, setContactsState] = useState(contacts);
 
+    // sort in alphabetical name order
     contacts.sort((a, b) => {
       if (a.name < b.name) {
         return -1;
@@ -33,6 +34,7 @@ export function ContactsComp({ contacts } : ContactsListProp) {
 
     const [detailContact, setDetailContact] = useState(contacts[0]);
 
+    // For grouping the contacts based first letter of full name
     const letters = new Set<string>();
     const badgeRefs = new Map();
     const scrollRefs = useRef<HTMLDivElement[]>([]);
@@ -88,6 +90,7 @@ export function ContactsComp({ contacts } : ContactsListProp) {
       i++;
     }
 
+    // scroll to the letter group
     const scrollToLetter = (letter: string) => {
       scrollRefs.current[badgeRefs.get(letter)].scrollIntoView({behavior: 'smooth'})
     }
@@ -119,6 +122,7 @@ export function ContactsComp({ contacts } : ContactsListProp) {
 }
 
 
+// Individual card for each contact
 function ContactCard(contact: Contact) {
   return (
     <Card className="m-1 align-middle flex flex-row gap-4 hover:bg-accent 
@@ -152,9 +156,9 @@ function ContactCard(contact: Contact) {
     </Card>
   );
 }
-  
+
+// Card for the details of the contact
 function ContactDetails(contact : Contact) {
-    
     return (
       <Card className="m-2 shadow-md">
         <CardHeader>
