@@ -1,7 +1,12 @@
 'use client'
 
 import { Contact, ContactsListProp } from "../types/contact"
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Briefcase, Globe, Mail, MapIcon, Phone } from "lucide-react"
+import { useRef, useState } from "react"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 import {
   Card,
   CardContent,
@@ -10,15 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Briefcase, Globe, Mail, MapIcon, Phone } from "lucide-react"
-import { useRef, useState } from "react"
-import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
-
 import profilePic from './profile-icon-design-free-vector.jpg'
-import { Separator } from "@/components/ui/separator"
 
 export function ContactsComp({ contacts } : ContactsListProp) {
     const [contactsState, setContactsState] = useState(contacts);
@@ -40,17 +38,19 @@ export function ContactsComp({ contacts } : ContactsListProp) {
     const scrollRefs = useRef<HTMLDivElement[]>([]);
 
     let i = 0;
-
     let firstLetter = contactsState[0].name.slice(0, 1);
     const contactGroupLetter = [];
     let group = [];
+
     for (const contact of contactsState) {
       if (!contact.name.startsWith(firstLetter)) {
         badgeRefs.set(firstLetter, i);
         const letter = contact.name.slice(0, 1).toUpperCase();
         contactGroupLetter.push((
           <div className="relative">
-            <div className="flex flex-row sticky top-0 bg-secondary z-10" key={i} ref={ref => scrollRefs.current.push(ref!)}>
+            <div className="flex flex-row sticky top-0 bg-secondary z-10" key={i}
+              ref={ref => scrollRefs.current.push(ref!)}
+            >
               <Badge className="w-8 ml-2 mt-4 mb-4">
                 {firstLetter}
               </Badge>
@@ -75,7 +75,9 @@ export function ContactsComp({ contacts } : ContactsListProp) {
       
       contactGroupLetter.push((
         <div className="relative">
-          <div className="sticky top-0 bg-secondary z-10" key={i} ref={ref => scrollRefs.current.push(ref!)}>
+          <div className="sticky top-0 bg-secondary z-10" key={i}
+          ref={ref => scrollRefs.current.push(ref!)}
+          >
             <Badge className="w-8 ml-2 mt-4 mb-4">
               {firstLetter}
             </Badge>
@@ -95,7 +97,8 @@ export function ContactsComp({ contacts } : ContactsListProp) {
         <div className="basis-2/3 flex flex-col">
           <div className="flex flex-row gap-4 mt-8 ml-8 mr-8">
             {Array.from(letters).map((ele) => (
-              <div key={ele} className="text-center flex-grow border rounded-lg bg-card cursor-pointer hover:bg-accent hover:text-accent-foreground shadow-sm"
+              <div key={ele} className="text-center flex-grow border rounded-lg bg-card
+                cursor-pointer hover:bg-accent hover:text-accent-foreground shadow-sm"
                 onClick={() => scrollToLetter(ele)}
               >
                 {ele}
@@ -118,7 +121,9 @@ export function ContactsComp({ contacts } : ContactsListProp) {
 
 function ContactCard(contact: Contact) {
   return (
-    <Card className="m-1 align-middle flex flex-row gap-4 hover:bg-accent hover:text-accent-foreground shadow-md">
+    <Card className="m-1 align-middle flex flex-row gap-4 hover:bg-accent 
+      hover:text-accent-foreground shadow-md"
+    >
       <CardHeader className="flex flex-row gap-4 flex-grow">
         <Avatar className="mt-1 z-0">
           <AvatarImage src="https://github.com/shadcn.png" />
