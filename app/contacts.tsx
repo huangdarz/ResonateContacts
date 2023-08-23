@@ -138,21 +138,21 @@ function ContactCard(contact: Contact) {
           <CardDescription>{contact.company.name}</CardDescription>
         </div>
       </CardHeader>
-      <Button variant='default' className="text-end mt-7 shadow">
         <a href={`tel:${contact.phone}`}>
-          <Phone/>
+        <Button variant='default' className="text-end mt-7 shadow">
+            <Phone/>
+        </Button>
         </a>
-      </Button>
-      <Button variant='default' className="text-end mt-7 shadow">
         <a href={`mailto:${contact.email}`}>
-          <Mail/>
+        <Button variant='default' className="text-end mt-7 shadow">
+            <Mail/>
+        </Button>
         </a>
-      </Button>
-      <Button variant='default' className="text-end mt-7 mr-10 shadow">
         <a href={`https://www.${contact.website}`}>
-          <Globe/>
+        <Button variant='default' className="text-end mt-7 mr-10 shadow">
+            <Globe/>
+        </Button>
         </a>
-      </Button>
     </Card>
   );
 }
